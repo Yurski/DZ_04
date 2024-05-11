@@ -9,10 +9,12 @@ class HttpGetHandler(BaseHTTPRequestHandler):
         url = urlparse(self.path)
         if url.path == '/':
             self.send_html("index.html")
-        elif url.path == '/message':
+        elif url.path == '/message.html':
             self.send_html("message.html")
         elif url.path == '/logo.png':
             self.send_image("logo.png")
+        elif url.path == '/style.css':
+            self.send_css("style.css")
         else:
             self.send_html("error.html", 404)
 
@@ -25,10 +27,19 @@ class HttpGetHandler(BaseHTTPRequestHandler):
 
     def send_image(self, image_filename, status=200):
         self.send_response(status)
-        self.send_header('content-type', 'image/png')  # Змініть на потрібний тип файлу, якщо це не png
+        self.send_header('content-type', 'image/png')  
         self.end_headers()
         with open(image_filename, 'rb') as f:
             self.wfile.write(f.read())
+
+
+    def send_css(self, css_filename, status=200):
+        self.send_response(status)
+        self.send_header('content-type', 'text/css')
+        self.end_headers()
+        with open(css_filename, 'rb') as f:
+            self.wfile.write(f.read())
+
 
 
 class UDPHandler(BaseRequestHandler):
